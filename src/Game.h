@@ -22,8 +22,9 @@ public:
 	static SDL_Renderer *renderer;
 
 private:
-	int cnt = 0;
 	bool isRunning;
 	SDL_Window *window;
+	int windowWidth = 0;
+	int windowHeight = 0;
 };
 

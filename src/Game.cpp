@@ -25,6 +25,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 		std::cout << "Subsystems Initialised..." << std::endl;
+		windowWidth = width;
+		windowHeight = height;
 		window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
 		if (window)
 		{
@@ -50,18 +52,61 @@ void Game::handleEvents()
 {
 	SDL_Event event;
 	SDL_PollEvent(&event);
-	switch (event.type)
-	{
-	case SDL_QUIT:
-		isRunning = false;
-	default:
-		break;
+
+	auto pos = player->GetPos();
+	int xPos = std::get<0>(pos);
+	int yPos = std::get<1>(pos);
+	int cellType = -1;
+	switch (event.type) {
+		case SDL_QUIT:
+			isRunning = false;
+			break;
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.sym) {
+			case SDLK_LEFT:
+				cellType = map->GetCellType(xPos, yPos, -1, 0);
+				if (cellType == 0 && (xPos-32 >= 0)) {
+					player->MoveLeft();
+				}
+				break;
+			case SDLK_RIGHT:
+				cellType = map->GetCellType(xPos, yPos, 1, 0);
+				if (cellType == 0 && (xPos+32 <= windowWidth)) {
+					player->MoveRight();
+				}
+				break;
+			case SDLK_UP:
+				cellType = map->GetCellType(xPos, yPos, 0, -1);
+				if (cellType == 0 && (yPos-32 >= 0)) {
+					player->MoveUp();
+				}
+				break;
+			case SDLK_DOWN:
+				cellType = map->GetCellType(xPos, yPos, 0, 1);
+				if (cellType == 0 && (yPos+32 <= windowHeight)) {
+					player->MoveDown();
+				}
+				break;
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
 	}
 }
 
 void Game::update()
 {
 	player->Update();
+	auto pos = player->GetPos();
+	int xPos = std::get<0>(pos);
+	int yPos = std::get<1>(pos);
+	std::cout << xPos << " " << yPos << std::endl;
+	if (xPos == 0 && yPos == 576) {
+		isRunning = false;
+		std::cout << "You Win!!!" << std::endl;
+	}
 }
 
 void Game::render()

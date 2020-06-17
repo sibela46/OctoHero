@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+#include <tuple>
 
 class GameObject {
 public:
@@ -8,6 +9,13 @@ public:
 
 	void Update();
 	void Render();
+
+	void MoveUp();
+	void MoveDown();
+	void MoveLeft();
+	void MoveRight();
+
+	std::tuple<int, int> GetPos();
 
 private:
 	int xpos;
