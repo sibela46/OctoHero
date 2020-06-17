@@ -102,7 +102,6 @@ void Game::update()
 	auto pos = player->GetPos();
 	int xPos = std::get<0>(pos);
 	int yPos = std::get<1>(pos);
-	std::cout << xPos << " " << yPos << std::endl;
 	if (xPos == 0 && yPos == 576) {
 		isRunning = false;
 		std::cout << "You Win!!!" << std::endl;
